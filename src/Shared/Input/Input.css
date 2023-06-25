@@ -1,0 +1,63 @@
+.inputDiv {
+    margin: 20px 0;
+    display: inline-block;
+    position: relative;
+}
+
+.customLabel {
+    padding: 22px;
+    margin-left: 32px;
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.4s ease-in-out;
+    border-radius: 10px;
+    z-index: 10;
+    font-size: 14px;
+}
+
+.customInput {
+    padding: 20px;
+    padding-left: 40px;
+    border-radius: 50px;
+    z-index: 0;
+    color: #040501a3;
+}
+
+.customInput:focus {
+    border: none;
+    /* Remove the border */
+    outline: none;
+    /* Remove the outline */
+    background-color: none;
+}
+
+.customInput:focus+.customLabel,
+.customInput:not(:placeholder-shown)+.customLabel {
+    color: rgba(4, 5, 1, 0.64);
+    padding: 0px 10px;
+    font-size: 14px;
+    left: -20px;
+    background-color: #fff;
+    transform: scale(0.75) translateY(-70%) translateX(-14px);
+
+}
+
+.required {
+    color: #AB2727;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+
+}
