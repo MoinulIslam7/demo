@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
-import { Plus } from '@phosphor-icons/react';
+import React, { useRef, useState, useEffect } from 'react';
+import { CaretDown, Plus } from '@phosphor-icons/react';
+import { useParams } from 'react-router-dom';
 import {
   Ellipse,
   Avatar,
 } from '../../Assets/SVGcomponents';
 import Tooltip from '../../Shared/Tooltip/Tooltip';
-import { softwares } from '../../Data/data';
 import './UserActivity.css';
 import img1 from '../../Assets/Images/img1.jpg';
 import img2 from '../../Assets/Images/img2.jpg';
@@ -14,10 +14,33 @@ import img4 from '../../Assets/Images/img4.jpg';
 import DateComponent from './DateComponent';
 import SoftwarePermission from './SoftwarePermission';
 import AdminNavbar from '../Admin/AdminNavbar';
-import ModalWrapper from '../../Hooks/ModalWrapper';
+import { useAuth } from '../../Contexts/AuthProvider';
+import Modal from '../../Hooks/Modal';
 
 function UserActivity() {
+  const [selectedUser, setSelectedUser] = useState({});
+  const { id } = useParams();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const ref = useRef();
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
   const softwareRef = useRef();
+  const { allusers } = useAuth();
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    setIsDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    if (id) {
+      const user = allusers.find((u) => u.id === id);
+      if (user) {
+        setSelectedUser(user);
+      }
+    }
+  }, [id, allusers]);
+
   return (
     <div>
       <div>
@@ -30,45 +53,83 @@ function UserActivity() {
             <Tooltip information="User All Activity" />
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex justify-start items-center py-3 px-2 bg-white">
-              <Avatar />
-              <p className="ml-2">Jacob Jones</p>
+            <div ref={ref} className="relative bg-white cursor-pointer">
+              <div
+                className="flex justify-between items-center whitespace-nowrap rounded border border-borderColor font-semibold px-6 py-4 w-40"
+                id={`dropdownMenuButton_${selectedUser?.id || ''}`}
+                onClick={toggleDropdown}
+                onKeyDown={() => { }}
+                role="contentinfo"
+              >
+                {selectedUser.id ? selectedUser.name : 'Select User'}
+                <span className="ml-2">
+                  <CaretDown size={20} />
+                </span>
+              </div>
+              {isDropdownOpen && (
+                <ul
+                  className="absolute z-50 float-left m-0 w-40 list-none overflow-hidden rounded-lg border-none bg-white text-left text-textPrimary shadow-lg"
+                  aria-labelledby={`dropdownMenuButton_${selectedUser?.id || ''}`}
+                >
+                  {allusers.map((user) => (
+                    <li key={user.id}>
+                      <button
+                        className="block w-full whitespace-nowrap bg-transparent px-4 py-2"
+                        onClick={() => handleUserSelect(user)}
+                      >
+                        {user.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
             <DateComponent />
           </div>
         </div>
-        <div className="px-[90px] flex justify-start items-center pb-5 ">
-          <div className=" w-4/12">
-            <p className="text-body text-[20px] leading-6 mb-7">User Details</p>
-            <div className="flex justify-start items-center gap-2">
-              <Avatar className="w-20 h-20" />
-              <div>
-                <p className="text-[20px] leading-6">Jacob Jones</p>
-                <p className="text-body">michelle.rivera@example.com</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-8/12">
-            <p className="text-body text-[20px] leading-6 mb-7">Software Permission list</p>
-            <div className="flex justify-start items-center gap-3">
-              {
-                softwares.slice(0, 3).map((s) => (
-                  <div key={s.id} className="p-5 bg-white w-20 h-20 border border-borderColor rounded-3xl flex justify-center items-center">
-                    <s.icon />
-                  </div>
-                ))
-              }
-              <div>
-                <div onClick={() => softwareRef.current.classList.remove('hidden')} role="contentinfo" onKeyDown={() => { }} className="py-5 bg-white w-20 h-20 border border-borderColor rounded-3xl flex justify-center items-center cursor-pointer">
-                  <Plus color="#50AB27" />
+        {selectedUser.id && (
+          <div className="px-[90px] flex justify-start items-center pb-5 ">
+            <div className="w-4/12">
+              <p className="text-body text-[20px] leading-6 mb-7">User Details</p>
+              <div className="flex justify-start items-center gap-2">
+                <Avatar className="w-20 h-20" />
+                <div>
+                  <p className="text-[20px] leading-6">{selectedUser?.name}</p>
+                  <p className="text-body">{selectedUser?.email}</p>
                 </div>
-                <ModalWrapper modalRef={softwareRef}>
-                  <SoftwarePermission />
-                </ModalWrapper>
+              </div>
+            </div>
+            <div className="w-8/12">
+              <p className="text-body text-[20px] leading-6 mb-7">Software Permission list</p>
+              <div className="flex justify-start items-center gap-3">
+                {selectedUser?.app?.slice(0, 7).map((s) => (
+                  <div
+                    key={s.id}
+                    className="p-5 bg-white w-20 h-20 border border-borderColor rounded-3xl flex justify-center items-center"
+                  >
+                    <img src={s.image} alt="" />
+                  </div>
+                ))}
+                <div>
+                  <div
+                    onClick={() => softwareRef.current.classList.remove('hidden')}
+                    role="contentinfo"
+                    onKeyDown={() => { }}
+                    className="py-5 bg-white w-20 h-20 border border-borderColor rounded-3xl flex justify-center items-center cursor-pointer"
+                  >
+                    <Plus color="#50AB27" />
+                  </div>
+                  <Modal modalRef={softwareRef}>
+                    <SoftwarePermission
+                      selectedUser={selectedUser}
+                      setSelectedUser={setSelectedUser}
+                    />
+                  </Modal>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
       <div className="mx-[70px] mt-12">
         <div>

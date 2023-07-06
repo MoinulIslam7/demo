@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const baseUrl = 'https://localhost:9998/api';
 const endpoints = {
-    register: {
+    registerUser: {
         url: `${baseUrl}/user/register`,
         method: 'POST',
     },
@@ -19,11 +19,11 @@ const endpoints = {
         method: 'PATCH',
     },
     updateOne: {
-        url: `${baseUrl}/user/:id`,
+        url: `${baseUrl}/user`,
         method: 'PATCH',
     },
     userProfile: {
-        url: `${baseUrl}/user/profile/:id`,
+        url: `${baseUrl}/user/profile`,
         method: 'GET',
     },
     users: {
@@ -35,7 +35,7 @@ const endpoints = {
         method: 'POST',
     },
     removeUser: {
-        url: `${baseUrl}/user/:id`,
+        url: `${baseUrl}/user`,
         method: 'DELETE',
     },
     create: {
@@ -47,21 +47,29 @@ const endpoints = {
         method: 'GET',
     },
 };
-
 export default function req({
-    target = '', body = {}, headers = { 'Access-Control-Allow-Origin': '*' }, params = {},
+    target = '',
+    body = {},
+    headers = { 'Access-Control-Allow-Origin': '*' },
+    query = {},
+    param = '',
 }) {
     const endpoint = endpoints[target];
     if (!endpoint) {
         throw new Error(`Invalid endpoint target: ${target}`);
     }
 
+    let { url } = endpoint;
+    if (param) {
+        url += `/${param}`;
+    }
+
     const config = {
-        url: endpoint.url,
+        url,
         method: endpoint.method,
         headers: { ...endpoint.headers, ...headers },
         data: { ...endpoint.body, ...body },
-        params: { ...params },
+        params: { ...query },
         withCredentials: true,
     };
 

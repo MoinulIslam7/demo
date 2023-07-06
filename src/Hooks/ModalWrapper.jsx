@@ -1,28 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import './ModalWrapper.css';
 
-/**
- * This component renders a popper at different parts of the website.
- * @param {Object} props - The component props.
- * @param {JSX.Element} props.children - The JSX content to be rendered inside the component.
- * @param {React.RefObject} props.modalRef - The reference to the modal element.
- * @returns {JSX.Element} - The JSX for the PopperComponent.
- */
-export default function ModalWrapper({ children, modalRef }) {
+export default function ModalWrapper({ toggleModal, isOpen, children }) {
+  const modalRef = useRef(null);
+
   useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        modalRef.current.classList.add('hidden');
+    const handleClickOutside = (event) => {
+      if (isOpen && modalRef.current && !modalRef.current.contains(event.target)) {
+        toggleModal();
       }
     };
-    document.addEventListener('mousedown', handleOutsideClick);
+
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      // Unbind the event listener on cleanup
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [modalRef]);
+  }, [isOpen, toggleModal]);
 
   return (
-    <div ref={modalRef} className="hidden">
-      {children}
+    <div className="modal" style={!isOpen ? { display: 'none' } : null}>
+      <div className="modal__wrapper" ref={modalRef}>
+        {children}
+      </div>
     </div>
   );
 }

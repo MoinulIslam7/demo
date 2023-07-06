@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import {
   At,
   Copy,
@@ -6,39 +5,24 @@ import {
   Minus,
   X,
 } from '@phosphor-icons/react';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
-import bg from '../../Assets/Images/bg.jpg';
+import { Link } from 'react-router-dom';
 import { Logo } from '../../Assets/SVGcomponents';
 import Input from '../../Shared/Input/Input';
-import req from '../../utils/network/req';
-import Loading from '../../Shared/Loading/Loading';
+import { useAuth } from '../../Contexts/AuthProvider';
 
 function Login() {
-  const [isLoading, setIsLoading] = useState(false);
-  const { handleSubmit, register, reset } = useForm();
-  const navigate = useNavigate();
+  const { logIn } = useAuth();
+  const { handleSubmit, register } = useForm();
 
   const onsubmit = (data) => {
-    setIsLoading(true);
-    req({ target: 'login', body: data })
-      .then((res) => {
-        console.log(res);
-        navigate('/');
-        reset();
-      })
-      .catch((err) => console.error(err))
-      .finally(() => {
-        setIsLoading(false);
-      });
+    logIn(data);
   };
 
-  if (isLoading) return <Loading />;
-
   return (
-    <div style={{ backgroundImage: `url(${bg})` }} className="bg-no-repeat bg-cover w-[100vw] h-[100vh] flex justify-center items-center ">
-      <div className="w-[600px] bg-[#ffffffdb] rounded-lg">
+    <div className="bg-no-repeat bg-cover w-[100vw] h-[100vh] flex justify-center items-center ">
+      <div className="w-[600px] bg-[#ffffffdb] rounded-lg border border-borderColor">
         <div className="bg-heading flex justify-between items-center py-3 px-5 rounded-t-lg">
           <Logo />
           <div className="flex flex-row justify-center items-center gap-9">

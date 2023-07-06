@@ -1,38 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import Loading from '../../Shared/Loading/Loading';
-import req from '../../utils/network/req';
+import React from 'react';
+import { useGlobalCtx } from '../../Contexts/GlobalProvider';
 import { useAuth } from '../../Contexts/AuthProvider';
+import Loading from '../../Shared/Loading/Loading';
 
-export default function SoftwarePermission() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [allSoftwares, setAllSoftwares] = useState([]);
-  const { apps, setApps } = useAuth();
-  console.log(apps);
-  useEffect(() => {
-    // const apps = user?.app.map((a) => a.id);
-    // setSelectedApps(apps);
-    setIsLoading(true);
-    req({ target: 'app' })
-      .then((res) => {
-        setAllSoftwares(res);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+export default function SoftwarePermission({ selectedUser, setSelectedUser }) {
+  const { allSoftwares, loading } = useGlobalCtx();
+  const { updateOne, allusers, setAllUsers } = useAuth();
 
-  const handleApps = (e, id) => {
+  const handleApps = async (e, software) => {
     const isChecked = e.target.checked;
+    let updatedUser;
+
     if (isChecked) {
-      setApps(([...prev]) => ([...prev, id]));
+      updatedUser = {
+        ...selectedUser,
+        app: [software, ...selectedUser.app],
+      };
     } else {
-      setApps(([...prev]) => (prev.filter((p) => p !== id)));
+      updatedUser = {
+        ...selectedUser,
+        app: selectedUser.app.filter((app) => app.id !== software.id),
+      };
     }
-    console.log(isChecked, id);
+
+    setSelectedUser(updatedUser);
+    await updateOne(selectedUser.id, { app: updatedUser.app.map((app) => app.id) });
+
+    // Update the selected user in setAllUsers
+    const updatedAllUsers = allusers.map((user) => {
+      if (user.id === selectedUser.id) {
+        return updatedUser;
+      }
+      return user;
+    });
+    setAllUsers(updatedAllUsers);
   };
 
-  if (isLoading) return <Loading />;
+  const isAppSelected = (software) => selectedUser?.app?.some((app) => app.id === software.id);
+
+  // Separate selected apps and unselected apps
+  const selectedApps = allSoftwares.filter(isAppSelected);
+  const unselectedApps = allSoftwares.filter((software) => !isAppSelected(software));
+
+  // Sort selected apps by the reverse order of their appearance
+  selectedApps.reverse();
+
+  // Sort unselected apps by the reverse order of their appearance
+  unselectedApps.reverse();
+
+  if (loading) return <Loading />;
   return (
     <div
       style={{ boxShadow: '0px 4px 40px rgba(0, 0, 0, 0.09)' }}
@@ -42,7 +58,7 @@ export default function SoftwarePermission() {
         <div className="w-6/12">
           <p className="pb-7 font-medium">Software Permission</p>
           <div className="overflow-y-scroll hide-scrollbar h-[40vh] flex flex-col gap-5">
-            {allSoftwares.map((software) => (
+            {selectedApps.map((software) => (
               <div key={software.id} className="flex justify-between items-start">
                 <div className="flex justify-start items-center">
                   <img className="w-10 h-10 mr-3" src={software?.image} alt="" />
@@ -56,8 +72,8 @@ export default function SoftwarePermission() {
                     type="checkbox"
                     className="checkbox"
                     id={software.id}
-                    onChange={(e) => handleApps(e, software.id)}
-                    checked={apps?.includes(software.id)}
+                    onChange={(e) => handleApps(e, software)}
+                    checked={isAppSelected(software)}
                   />
                   <label className="switch" htmlFor={software.id}>
                     <span className="slider">{ }</span>
@@ -70,7 +86,7 @@ export default function SoftwarePermission() {
         <div className="w-6/12">
           <p className="pb-7 font-medium">All Software</p>
           <div className="overflow-y-scroll hide-scrollbar h-[40vh] flex flex-col gap-5">
-            {allSoftwares.map((software) => (
+            {selectedApps.map((software) => (
               <div key={software.id} className="flex justify-between items-start">
                 <div className="flex justify-start items-center">
                   <img className="w-10 h-10 mr-3" src={software?.image} alt="" />
@@ -84,8 +100,31 @@ export default function SoftwarePermission() {
                     type="checkbox"
                     className="checkbox"
                     id={software.id}
-                    onChange={(e) => handleApps(e, software.id)}
-                    checked={apps?.includes(software.id)}
+                    onChange={(e) => handleApps(e, software)}
+                    checked={isAppSelected(software)}
+                  />
+                  <label className="switch" htmlFor={software.id}>
+                    <span className="slider">{ }</span>
+                  </label>
+                </div>
+              </div>
+            ))}
+            {unselectedApps.map((software) => (
+              <div key={software.id} className="flex justify-between items-start">
+                <div className="flex justify-start items-center">
+                  <img className="w-10 h-10 mr-3" src={software?.image} alt="" />
+                  <div>
+                    <p className="font-semibold">{software.name}</p>
+                    <p className="text-body">{software.path}</p>
+                  </div>
+                </div>
+                <div className="container">
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    id={software.id}
+                    onChange={(e) => handleApps(e, software)}
+                    checked={isAppSelected(software)}
                   />
                   <label className="switch" htmlFor={software.id}>
                     <span className="slider">{ }</span>

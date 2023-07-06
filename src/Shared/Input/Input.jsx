@@ -16,6 +16,7 @@ export default function Input({
   disabled = false,
   register = {},
   className = '',
+  defaultValue = '',
 }) {
   return (
     <div className="w-full inputDiv">
@@ -31,6 +32,7 @@ export default function Input({
           name={label}
           onClick={onClick}
           placeholder=" "
+          defaultValue={defaultValue}
           step={step}
           onInput={(e) => e.target.setCustomValidity('')}
           title={title}

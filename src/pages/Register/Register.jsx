@@ -9,7 +9,6 @@ import {
   Lock,
 } from '@phosphor-icons/react';
 import { Link, useNavigate } from 'react-router-dom';
-import bg from '../../Assets/Images/bg.jpg';
 import { Logo } from '../../Assets/SVGcomponents';
 import Input from '../../Shared/Input/Input';
 import req from '../../utils/network/req';
@@ -36,7 +35,7 @@ function Register() {
   if (isLoading) return <Loading />;
 
   return (
-    <div style={{ backgroundImage: `url(${bg})` }} className="bg-no-repeat bg-cover w-[100vw] h-[100vh] flex justify-center items-center ">
+    <div className="bg-no-repeat bg-cover w-[100vw] h-[100vh] flex justify-center items-center ">
       <div className="w-[600px] bg-[#ffffffdb] rounded-lg">
         <div className="bg-heading flex justify-between items-center py-3 px-5 rounded-t-lg">
           <Logo />

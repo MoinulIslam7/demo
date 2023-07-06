@@ -1,14 +1,29 @@
-import { CaretDown } from '@phosphor-icons/react';
 import React, { useRef, useState } from 'react';
+import { CaretDown } from '@phosphor-icons/react';
+import { Link } from 'react-router-dom'; // Import the Link component from React Router
 import useOnclickOutside from '../../Hooks/UseOnClickOutSide';
+import { useAuth } from '../../Contexts/AuthProvider';
+import EditUser from '../../pages/EditUser/EditUser';
+import ModalWrapper from '../../Hooks/ModalWrapper';
 
-function Dropdown() {
+function Dropdown({ id }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
+
   const ref = useRef();
   useOnclickOutside(ref, () => setIsDropdownOpen(false));
+  const { removeUser } = useAuth();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+  const toggleOpenEdit = () => {
+    setIsOpenEdit(!isOpenEdit);
+  };
+
+  const handleDeleteUser = () => {
+    removeUser(id);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -16,7 +31,7 @@ function Dropdown() {
       <button
         className="flex items-center whitespace-nowrap rounded border border-borderColor font-semibold px-6 pb-2 pt-2.5 w-28"
         type="button"
-        id="dropdownMenuButton1"
+        id={`dropdownMenuButton_${id}`}
         aria-expanded={isDropdownOpen}
         onClick={toggleDropdown}
       >
@@ -27,32 +42,39 @@ function Dropdown() {
       </button>
       {isDropdownOpen && (
         <ul
-          className="absolute z-50 float-left m-0 w-28 list-none overflow-hidden rounded-lg border-none bg-white text-left text-textPrimary shadow-lg"
-          aria-labelledby="dropdownMenuButton1"
+          className="absolute z-50  m-0 w-28 list-none overflow-hidden rounded-lg border-none bg-white text-left text-textPrimary shadow-lg"
+          aria-labelledby={`dropdownMenuButton_${id}`}
         >
           <li>
-            <a
-              className="block w-full whitespace-nowrap bg-transparent px-4 py-2"
-              href="./Dropdown.jsx"
+            <Link
+              to={`/useractivity/${id}`}
+              className="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-center"
             >
               Activity
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              className="block w-full whitespace-nowrap bg-transparent px-4 py-2 "
-              href="./Dropdown.jsx"
-            >
-              Edit
-            </a>
+            <div>
+              <ModalWrapper isOpen={isOpenEdit} toggleModal={toggleOpenEdit}>
+                <div className="content">
+                  <EditUser setIsOpenEdit={setIsOpenEdit} id={id} />
+                </div>
+              </ModalWrapper>
+              <button
+                onClick={toggleOpenEdit}
+                className="block w-full whitespace-nowrap bg-transparent px-4 py-2"
+              >
+                Edit
+              </button>
+            </div>
           </li>
           <li>
-            <a
+            <button
               className="block w-full whitespace-nowrap bg-transparent px-4 py-2"
-              href="./Dropdown.jsx"
+              onClick={handleDeleteUser}
             >
               Delete
-            </a>
+            </button>
           </li>
         </ul>
       )}

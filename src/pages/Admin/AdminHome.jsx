@@ -5,11 +5,13 @@ import './AdminHome.css';
 import AdminNavbar from './AdminNavbar';
 import Loading from '../../Shared/Loading/Loading';
 import { useAuth } from '../../Contexts/AuthProvider';
-import useGlobal from '../../Hooks/useGlobal';
+import { useGlobalCtx } from '../../Contexts/GlobalProvider';
+import { Avatar } from '../../Assets/SVGcomponents';
 
 function AdminHome() {
   const { allusers, isLoading } = useAuth();
-  const { allSoftwares, loading } = useGlobal();
+  const { allSoftwares, loading } = useGlobalCtx();
+  console.log(allSoftwares);
 
   if (isLoading || loading) return <Loading />;
 
@@ -27,8 +29,8 @@ function AdminHome() {
             </div>
             <div className="overflow-y-scroll hide-scrollbar h-[85vh] flex flex-col px-96">
               {allSoftwares.map((software) => (
-                <div key={software.id} className="py-5 bg-white w-[145px] h-auto px-2 mb-8 border border-borderColor rounded-3xl flex flex-col justify-center items-center">
-                  <img src={software?.image} alt="" />
+                <div key={software.id} className="py-5 bg-white w-[145px] h-auto px-2 mb-8 border border-borderColor rounded-3xl flex flex-col justify-center items-center cursor-pointer">
+                  <img src={software?.path} alt="" />
                   <p className="text-heading pt-2">{software.name}</p>
                 </div>
               ))}
@@ -48,7 +50,7 @@ function AdminHome() {
               >
                 <div className="flex justify-start items-center w-4/12">
                   <div>
-                    {/* {user.userImg && <user.userImg className="w-20 h-20 mr-2" />} */}
+                    {user?.image ? <img src={user?.image} alt="" className="w-20 h-20 mr-2" /> : <Avatar className="w-20 h-20 mr-2" />}
                   </div>
                   <div>
                     <p>{user.userName}</p>
@@ -56,17 +58,17 @@ function AdminHome() {
                   </div>
                 </div>
                 <div className="flex justify-start items-center w-6/12 gap-4">
-                  {user.app.map((app) => (
+                  {user.app.slice(0, 5).map((app) => (
                     <div
                       key={app.id}
                       className="py-2 bg-white w-20 h-20 border border-borderColor rounded-3xl flex flex-col justify-start items-center"
                     >
-                      {/* {app.icon && <app.icon />} */}
+                      <img src={app.image} alt="" />
                     </div>
                   ))}
                 </div>
                 <div className="flex justify-end items-center rounded-md">
-                  <Dropdown />
+                  <Dropdown user={user} id={user.id} />
                 </div>
               </div>
             ))}

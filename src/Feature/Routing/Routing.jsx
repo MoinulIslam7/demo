@@ -7,6 +7,8 @@ import Register from '../../pages/Register/Register';
 import UserProfile from '../../pages/User/UserProfile';
 import UserActivity from '../../pages/UserActivity/UserActivity';
 import Private from '../Private/Private';
+import UserHome from '../../pages/User/UserHome';
+import PublicRoute from '../Private/PublicRoute';
 
 export default function Routing() {
   return (
@@ -23,6 +25,11 @@ export default function Routing() {
       />
       <Route
         exact
+        path="/useractivity/:id"
+        element={<Private><UserActivity /></Private>}
+      />
+      <Route
+        exact
         path="/userProfile"
         element={<UserProfile />}
       />
@@ -35,6 +42,11 @@ export default function Routing() {
         exact
         path="/register"
         element={<Register />}
+      />
+      <Route
+        exact
+        path="/home"
+        element={<PublicRoute><UserHome /></PublicRoute>}
       />
       <Route
         path="*"

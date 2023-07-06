@@ -1,34 +1,61 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { Upload } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../Admin/AdminHome.css';
 import Input from '../../Shared/Input/Input';
-import Loading from '../../Shared/Loading/Loading';
-import req from '../../utils/network/req';
+// import { useGlobalCtx } from '../../Contexts/GlobalProvider';
 
-export default function AddNewSoftware() {
-  const [isLoading, setIsLoading] = useState(false);
+export default function AddNewSoftware({ setIsAddNewSoftwareOpen }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const { handleSubmit, register, reset } = useForm();
+  // const { createSoftware } = useGlobalCtx();
+  function convertImageToBase64(image) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
 
-  const onsubmit = (data) => {
-    console.log(data);
-    setIsLoading(true);
-    req({ target: 'create', body: data })
-      .then((res) => {
-        console.log(res);
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+
+      reader.readAsDataURL(image);
+    });
+  }
+
+  const onsubmit = async (data) => {
+    const { name, path } = data;
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('path', path);
+
+    if (selectedImage) {
+      try {
+        const base64Image = await convertImageToBase64(selectedImage);
+        formData.append('image', base64Image);
+
+        console.log('formData:', formData);
+
+        setIsAddNewSoftwareOpen(false);
+        // createSoftware(formData);
         reset();
-      })
-      .catch((err) => console.error(err))
-      .finally(() => {
-        setIsLoading(false);
-      });
+      } catch (error) {
+        console.log('Image conversion failed:', error);
+      }
+    } else {
+      console.log('No image selected');
+
+      setIsAddNewSoftwareOpen(false);
+      // createSoftware(formData);
+      reset();
+    }
   };
 
-  if (isLoading) return <Loading />;
-
   return (
-    <div className="box absolute m-auto right-0 left-0 top-0 bottom-0 w-[564px] h-[30rem] bg-white cursor-pointer rounded-[8px] p-8 text-[#000000]">
+    <div className="w-[564px] h-[30rem] bg-white cursor-pointer rounded-[8px] p-8 text-[#000000]">
       <h2 className="font-medium">Add New software</h2>
       <hr className="opacity-10 mt-2" />
       <form onSubmit={handleSubmit(onsubmit)} className="mt-8">
@@ -52,16 +79,17 @@ export default function AddNewSoftware() {
                 hidden
                 type="file"
                 id="logo"
-                onChange={(e) => {
-                  register('image', { value: e.target.files[0] });
-                  setSelectedImage(e.target.files[0]); // Update selectedImage state
-                }}
+                {...register('image', {
+                  onChange: (e) => {
+                    setSelectedImage(e.target.files[0]);
+                  },
+                })}
               />
             </div>
           </label>
         </div>
-        <div className="flex justify-end items-center">
-          <input type="submit" className="bg-primary text-white rounded-[50px] text-white py-4 px-8" value="Add New" />
+        <div className="flex justify-end items-center cursor-pointer">
+          <input type="submit" className="bg-primary text-white cursor-pointer rounded-[50px] py-4 px-8" value="Add New" />
         </div>
       </form>
     </div>

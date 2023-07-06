@@ -2,25 +2,33 @@
   "name": "cokie",
   "version": "0.1.0",
   "private": true,
+  "main": "app/index.js",
+  "homepage": "./",
   "dependencies": {
+    "@craco/craco": "^7.1.0",
     "@phosphor-icons/react": "^2.0.9",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
+    "concurrently": "^8.2.0",
+    "electron-forge": "^5.2.4",
+    "electron-is-dev": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.0",
     "react-router-dom": "^6.12.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "wait-on": "^7.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "craco build",
+    "start": "electron .",
+    "start-react": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "dev": "concurrently \"yarn start-react\"  \"wait-on http://localhost:3000 && yarn start\""
   },
   "eslintConfig": {
     "extends": [
@@ -41,12 +49,14 @@
     ]
   },
   "devDependencies": {
+    "electron": "^25.2.0",
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "tailwindcss": "^3.3.2"
+    "tailwindcss": "^3.3.2",
+    "webpack-node-externals": "^3.0.0"
   }
 }

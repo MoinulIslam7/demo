@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Calendar } from '@phosphor-icons/react';
 import CalendarComponent from './CalendarComponent';
-import ModalWrapper from '../../Hooks/ModalWrapper';
+import Modal from '../../Hooks/Modal';
 
 function DateComponent() {
   const [date, setDate] = useState(new Date());
@@ -36,20 +36,11 @@ function DateComponent() {
       <div>
         <div className="flex justify-start items-center py-3 px-2 bg-white cursor-pointer w-[200px]" onClick={() => modalRef.current.classList.remove('hidden')} onKeyDown={() => { }} role="contentinfo">
           <Calendar color="#50AB27" size={32} />
-          <ModalWrapper modalRef={modalRef}>
+          <Modal modalRef={modalRef}>
             <CalendarComponent
               onSelect={handleDateSelect}
             />
-          </ModalWrapper>
-          {/* <div>
-            {showModal && createPortal(
-              <CalendarComponent
-                onSelect={handleDateSelect}
-                onClose={() => setShowModal(false)}
-              />,
-              document.body,
-            )}
-          </div> */}
+          </Modal>
           <p className="ml-2 text-body">{date.toDateString()}</p>
         </div>
       </div>
@@ -62,25 +53,3 @@ function DateComponent() {
 }
 
 export default DateComponent;
-/*
-import React, { useEffect, useRef } from 'react';
-import PopperComponent from './PopperComponent'; // Assuming the component is in a separate file
-
-function App() {
-  const modalRef = useRef(null);
-
-  return (
-    <div>
-      <h1>Example React App</h1>
-      <button onClick={() => modalRef.current.classList.remove('hidden')}>Show Popper</button>
-
-      <PopperComponent modalRef={modalRef}>
-        <p>This is the content inside the PopperComponent.</p>
-      </PopperComponent>
-    </div>
-  );
-}
-
-export default App;
-
-*/

@@ -5,54 +5,50 @@ import req from '../utils/network/req';
 const useUser = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [apps, setApps] = useState([]);
+  const [selectApps, setSelectedApps] = useState([]);
   const [allusers, setAllUsers] = useState([]);
-
   const navigate = useNavigate();
 
-  const cheeckRole = (role) => role.includes(user.role);
+  const checkRole = (role) => role.includes(user?.role);
 
   useEffect(() => {
-    req({ target: 'me' })
-      .then((res) => {
-        setUser(res);
-        setApps(res.app.map((a) => a.id));
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setIsLoading(false));
+    (async () => {
+      try {
+        const userResponse = await req({ target: 'me' });
+        setUser(userResponse);
+        setSelectedApps(userResponse.app);
 
-    req({ target: 'users' })
-      .then((res) => {
-        setAllUsers(res);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => {
+        const usersResponse = await req({ target: 'users' });
+        setAllUsers(usersResponse);
+      } catch (err) {
+        console.error(err);
+      } finally {
         setIsLoading(false);
-      });
-  }, [isLoading]);
+      }
+    })();
+  }, []);
 
   const logIn = (data) => {
     req({ target: 'login', body: data })
       .then((res) => {
         setUser(res);
-        navigate('/');
+        if (res.role === 'user') {
+          navigate('/home');
+        }
+        if (res.role === ('admin' || 'super admin')) {
+          navigate('/');
+        }
       })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .catch((err) => console.log(err));
   };
 
-  const register = (data) => {
-    req({ target: 'register', body: data })
+  const registerUser = (data) => {
+    req({ target: 'registerUser', body: data })
       .then((res) => {
-        setUser(res);
+        setAllUsers(([...prev]) => ([...prev, res]));
         navigate('/');
       })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .catch((err) => console.log(err));
   };
 
   const updateOwn = (data) => {
@@ -67,43 +63,34 @@ const useUser = () => {
   };
 
   const updateOne = (id, data) => {
-    req({ target: 'updateOne', params: { id }, body: data })
-      .then((res) => res)
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setIsLoading(false);
-      });
+    req({ target: 'updateOne', param: id, body: data })
+      .then((res) => {
+        setAllUsers(([...prev]) => (prev.map((p) => (p.id === res.id ? res : p))));
+      })
+      .catch((err) => console.log(err));
   };
 
   const getUserProfile = (id) => {
     req({ target: 'userProfile', params: { id } })
       .then((res) => res)
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .catch((err) => console.log(err));
   };
 
   const logout = () => {
     req({ target: 'logout' })
       .then(() => {
         navigate('/login');
+        setUser(null);
       })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .catch((err) => console.log(err));
   };
 
   const removeUser = (id) => {
-    req({ target: 'removeUser', params: { id } })
-      .then((res) => {
-        console.log(res);
+    req({ target: 'removeUser', param: id })
+      .then(() => {
+        setAllUsers((prevUsers) => prevUsers.filter((e) => e.id !== id));
       })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .catch((err) => console.log(err));
   };
 
   return {
@@ -111,15 +98,15 @@ const useUser = () => {
     setUser,
     isLoading,
     logIn,
-    register,
+    registerUser,
     updateOwn,
     updateOne,
     getUserProfile,
     logout,
     removeUser,
-    cheeckRole,
-    apps,
-    setApps,
+    checkRole,
+    selectApps,
+    setSelectedApps,
     allusers,
     setAllUsers,
   };
