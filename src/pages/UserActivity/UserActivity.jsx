@@ -3,7 +3,6 @@ import { CaretDown, Plus } from '@phosphor-icons/react';
 import { useParams } from 'react-router-dom';
 import {
   Ellipse,
-  Avatar,
 } from '../../Assets/SVGcomponents';
 import Tooltip from '../../Shared/Tooltip/Tooltip';
 import './UserActivity.css';
@@ -16,6 +15,7 @@ import SoftwarePermission from './SoftwarePermission';
 import AdminNavbar from '../Admin/AdminNavbar';
 import { useAuth } from '../../Contexts/AuthProvider';
 import Modal from '../../Shared/ModalWrapper/Modal';
+import ImageShow from '../../Shared/ImageShow/ImageShow';
 
 /**
  * Renders the User Activity component.
@@ -60,13 +60,20 @@ function UserActivity() {
           <div className="flex items-center gap-2">
             <div ref={ref} className="relative bg-white cursor-pointer">
               <div
-                className="flex justify-between items-center whitespace-nowrap rounded border border-borderColor font-semibold px-6 py-4 w-40"
+                className="flex justify-between items-center whitespace-nowrap rounded border border-borderColor font-semibold px-2 py-2 w-auto"
                 id={`dropdownMenuButton_${selectedUser?.id || ''}`}
                 onClick={toggleDropdown}
                 onKeyDown={() => { }}
                 role="contentinfo"
               >
-                {selectedUser.id ? selectedUser.name : 'Select User'}
+                <div className="flex justify-start items-center gap-4">
+                  <div className="w-10 h-10 rounded-[50px] overflow-hidden">
+                    <ImageShow path={selectedUser.avatar} />
+                  </div>
+                  <div>
+                    {selectedUser.id ? selectedUser.name : 'Select User'}
+                  </div>
+                </div>
                 <span className="ml-2">
                   <CaretDown size={20} />
                 </span>
@@ -77,7 +84,10 @@ function UserActivity() {
                   aria-labelledby={`dropdownMenuButton_${selectedUser?.id || ''}`}
                 >
                   {allusers.map((user) => (
-                    <li key={user.id}>
+                    <li key={user.id} className="flex justify-start items-left">
+                      <div className="w-10 h-10 rounded-[50px] overflow-hidden ml-2 my-1">
+                        <ImageShow path={user.avatar} />
+                      </div>
                       <button
                         className="block w-full whitespace-nowrap bg-transparent px-4 py-2"
                         onClick={() => handleUserSelect(user)}
@@ -97,7 +107,9 @@ function UserActivity() {
             <div className="w-4/12">
               <p className="text-body text-[20px] leading-6 mb-7">User Details</p>
               <div className="flex justify-start items-center gap-2">
-                <Avatar className="w-20 h-20" />
+                <div className="w-20 h-20 rounded-[50px] overflow-hidden ml-2 my-1">
+                  <ImageShow path={selectedUser.avatar} />
+                </div>
                 <div>
                   <p className="text-[20px] leading-6">{selectedUser?.name}</p>
                   <p className="text-body">{selectedUser?.email}</p>
@@ -110,9 +122,11 @@ function UserActivity() {
                 {selectedUser?.app?.slice(0, 7).map((s) => (
                   <div
                     key={s.id}
-                    className="p-5 bg-white w-20 h-20 border border-borderColor rounded-3xl flex justify-center items-center"
+                    className="p-5 bg-white w-24 h-24 border border-borderColor rounded-3xl flex justify-center items-center"
                   >
-                    <img src={s.image} alt="" />
+                    <div className="w-16 h-16">
+                      <ImageShow path={s.image} />
+                    </div>
                   </div>
                 ))}
                 <div>
@@ -120,7 +134,7 @@ function UserActivity() {
                     onClick={() => softwareRef.current.classList.remove('hidden')}
                     role="contentinfo"
                     onKeyDown={() => { }}
-                    className="py-5 bg-white w-20 h-20 border border-borderColor rounded-3xl flex justify-center items-center cursor-pointer"
+                    className="py-5 bg-white w-24 h-24 border border-borderColor rounded-3xl flex justify-center items-center cursor-pointer"
                   >
                     <Plus color="#50AB27" />
                   </div>

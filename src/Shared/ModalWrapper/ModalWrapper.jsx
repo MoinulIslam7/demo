@@ -1,28 +1,24 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import './ModalWrapper.css';
 
 export default function ModalWrapper({ toggleModal, isOpen, children }) {
-  const modalRef = useRef(null);
-
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isOpen && modalRef.current && !modalRef.current.contains(event.target)) {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape' && isOpen) {
         toggleModal();
       }
     };
 
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      // Unbind the event listener on cleanup
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, toggleModal]);
 
   return (
-    <div className="modal" style={!isOpen ? { display: 'none' } : null}>
-      <div className="modal__wrapper" ref={modalRef}>
-        {children}
+    <div className={`modal ${isOpen ? 'visible' : ''}`} onClick={toggleModal} role="contentinfo" onKeyDown={() => { }}>
+      <div className="modal__wrapper" onClick={(e) => e.stopPropagation()} role="contentinfo" onKeyDown={() => { }}>
+        <div className="modal__content">{children}</div>
       </div>
     </div>
   );

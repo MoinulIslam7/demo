@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import Loading from '../Loading/Loading';
 import '../Input/Input.css';
 import { useGlobalCtx } from '../../Contexts/GlobalProvider';
+import ImageShow from '../ImageShow/ImageShow';
 
 export default function SoftwarePermissionInput({ label, selectApps, setSelectedApps }) {
   const { allSoftwares, loading } = useGlobalCtx();
@@ -50,11 +51,13 @@ export default function SoftwarePermissionInput({ label, selectApps, setSelected
             {label}
           </label>
           {isOpen && (
-            <div className="absolute top-20 z-10 bg-white w-full overflow-y-scroll hide-scrollbar h-[8rem] flex flex-col gap-5">
+            <div className="absolute left-0 top-20 z-50 bg-white w-full overflow-y-scroll hide-scrollbar h-[8rem] flex flex-col gap-5">
               {allSoftwares?.map((software) => (
                 <div key={software.id} className="flex justify-between items-start">
                   <div className="flex justify-start items-center">
-                    <img className="w-10 h-10 mr-3" src={software?.image} alt="" />
+                    <div className="w-[50px] h-[50px] mr-4">
+                      <ImageShow path={software.image} />
+                    </div>
                     <div>
                       <p className="font-semibold">{software.name}</p>
                       <p className="text-body">{software.path}</p>

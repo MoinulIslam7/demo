@@ -1,22 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { Upload } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useGlobalCtx } from '../../Contexts/GlobalProvider';
+import { Upload } from '@phosphor-icons/react';
 import Input from '../../Shared/Input/Input';
 import '../Admin/AdminHome.css';
 
-/**
- * Renders the Add New Software component.
- * @param {Object} props - Component props.
- * @param {function} props.setIsAddNewSoftwareOpen
- * - Function to set the state of the Add New Software modal.
- * @returns {JSX.Element} Add New Software component.
- */
-export default function AddNewSoftware({ setIsAddNewSoftwareOpen }) {
-  const [selectedImage, setSelectedImage] = useState(null);
+export default function AddNewSoftware({ closeAddNewSoftware }) {
   const { handleSubmit, register, reset } = useForm();
-  const { createSoftware } = useGlobalCtx();
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const onSubmit = async (data) => {
     const fd = new FormData();
@@ -29,9 +20,8 @@ export default function AddNewSoftware({ setIsAddNewSoftwareOpen }) {
       }),
     };
     Object.keys(payload).forEach((key) => fd.append(key, payload[key]));
-    createSoftware(fd);
-    setIsAddNewSoftwareOpen(false);
-    setSelectedImage(false);
+    closeAddNewSoftware();
+    setSelectedImage(null);
     reset();
   };
 

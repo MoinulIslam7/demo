@@ -2,6 +2,7 @@ import React from 'react';
 import { useGlobalCtx } from '../../Contexts/GlobalProvider';
 import { useAuth } from '../../Contexts/AuthProvider';
 import Loading from '../../Shared/Loading/Loading';
+import ImageShow from '../../Shared/ImageShow/ImageShow';
 
 export default function SoftwarePermission({ selectedUser, setSelectedUser }) {
   const { allSoftwares, loading } = useGlobalCtx();
@@ -61,7 +62,9 @@ export default function SoftwarePermission({ selectedUser, setSelectedUser }) {
             {selectedApps.map((software) => (
               <div key={software.id} className="flex justify-between items-start">
                 <div className="flex justify-start items-center">
-                  <img className="w-10 h-10 mr-3" src={software?.image} alt="" />
+                  <div className="w-10 h-10 mr-3">
+                    <ImageShow path={software?.image} />
+                  </div>
                   <div>
                     <p className="font-semibold">{software.name}</p>
                     <p className="text-body">{software.path}</p>
@@ -89,7 +92,9 @@ export default function SoftwarePermission({ selectedUser, setSelectedUser }) {
             {selectedApps.map((software) => (
               <div key={software.id} className="flex justify-between items-start">
                 <div className="flex justify-start items-center">
-                  <img className="w-10 h-10 mr-3" src={software?.image} alt="" />
+                  <div className="w-10 h-10 mr-3">
+                    <ImageShow path={software?.image} />
+                  </div>
                   <div>
                     <p className="font-semibold">{software.name}</p>
                     <p className="text-body">{software.path}</p>

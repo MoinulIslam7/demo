@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Upload } from '@phosphor-icons/react';
 import Input from '../../Shared/Input/Input';
 import '../UserActivity/UserActivity.css';
@@ -9,34 +9,32 @@ import SoftwarePermissionInput from '../../Shared/SoftwarePermissionInput/Softwa
 import { useAuth } from '../../Contexts/AuthProvider';
 import '../Admin/AdminHome.css';
 
-/**
- * Renders the Add New User component.
- * @param {Object} props - Component props.
- * @param {function} props.setIsAddNewUserOpen -
- *  Function to set the state of the Add New User modal.
- * @returns {JSX.Element} Add New User component.
- */
-
-export default function AddNewUser({ setIsAddNewUserOpen }) {
+export default function AddNewUser({ closeAddNewUser }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [selectApps, setSelectedApps] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
   const { registerUser } = useAuth();
 
   const { handleSubmit, register, reset } = useForm();
 
   const onSubmit = (data) => {
+    console.log(data);
     const appIds = selectApps.map((a) => a.id);
-    const avatar = data.image[0];
+    const avatar = data.avatar[0];
     const formData = new FormData();
     const payload = {
       avatar,
-      ...data,
-      role: selectedOption,
-      app: appIds,
+      data: JSON.stringify({
+        name: data.name,
+        userName: data.userName,
+        email: data.email,
+        password: data.password,
+        role: selectedOption,
+        app: appIds,
+      }),
     };
     Object.keys(payload).forEach((key) => formData.append(key, payload[key]));
-    setIsAddNewUserOpen(false);
+    closeAddNewUser();
     registerUser(formData);
     reset();
   };
@@ -51,7 +49,7 @@ export default function AddNewUser({ setIsAddNewUserOpen }) {
             <div className="flex items-center py-5 gap-2">
               <Upload />
               <p className="text-textPrimary block">
-                {selectedImage ? selectedImage.name : 'Upload logo. (JPG, PNG)'}
+                {selectedAvatar ? selectedAvatar.name : 'Upload logo. (JPG, PNG)'}
               </p>
             </div>
             <div>
@@ -60,9 +58,10 @@ export default function AddNewUser({ setIsAddNewUserOpen }) {
                 hidden
                 type="file"
                 id="logo"
-                {...register('image', {
+                {...register('avatar', {
                   onChange: (e) => {
-                    setSelectedImage(e.target.files[0]);
+                    console.log(e.target.files[0]);
+                    setSelectedAvatar(e.target.files[0]);
                   },
                 })}
               />
@@ -95,8 +94,8 @@ export default function AddNewUser({ setIsAddNewUserOpen }) {
             setSelectedOption={setSelectedOption}
           />
         </div>
-        <div className="flex justify-end items-center">
-          <input type="submit" className="bg-primary cursor-pointer text-white rounded-[50px] py-4 px-8" value="Add New" />
+        <div className="flex justify-end items-center cursor-pointer">
+          <input type="submit" className="bg-primary text-white cursor-pointer rounded-[50px] py-4 px-8" value="Add New" />
         </div>
       </form>
     </div>

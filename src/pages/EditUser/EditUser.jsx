@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { Upload } from '@phosphor-icons/react';
 import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
@@ -5,8 +6,8 @@ import Input from '../../Shared/Input/Input';
 import RoleInput from '../../Shared/RoleInput/RoleInput';
 import SoftwarePermissionInput from '../../Shared/SoftwarePermissionInput/SoftwarePermissionInput';
 import { useAuth } from '../../Contexts/AuthProvider';
-import { Avatar } from '../../Assets/SVGcomponents';
 import '../Admin/AdminHome.css';
+import ImageShow from '../../Shared/ImageShow/ImageShow';
 
 /**
  * Renders the Edit User component.
@@ -18,7 +19,7 @@ export default function EditUser({ id, setIsOpenEdit }) {
   const { allusers } = useAuth();
   const user = allusers.find((u) => u.id === id);
   const [selectedOption, setSelectedOption] = useState(user?.role);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [selectApps, setSelectedApps] = useState(user?.app);
   const { updateOne } = useAuth();
 
@@ -38,13 +39,18 @@ export default function EditUser({ id, setIsOpenEdit }) {
       }
     });
     const appIds = selectApps.map((a) => a.id);
-    const avatar = data.image[0];
+    const avatar = data?.image[0];
     const formData = new FormData();
     const payload = {
       avatar,
-      ...data,
-      role: selectedOption,
-      app: appIds,
+      data: JSON.stringify({
+        name: data.name,
+        userName: data.userName,
+        email: data.email,
+        password: data.password,
+        role: selectedOption,
+        app: appIds,
+      }),
     };
     Object.keys(payload).forEach((key) => formData.append(key, payload[key]));
     setIsOpenEdit(false);
@@ -60,15 +66,15 @@ export default function EditUser({ id, setIsOpenEdit }) {
       <hr className="opacity-10 mt-2" />
       <form onSubmit={handleSubmit(onsubmit)} className="mt-8">
         <div className="flex justify-center items-center">
-          <div>
-            {user?.image ? <img src={user?.image} alt="" className="w-16 h-16 mr-4" /> : <Avatar className="w-16 h-16 mr-4" />}
+          <div className="w-16 h-16 mr-4 rounded-[50px] overflow-hidden">
+            <ImageShow path={user.avatar} />
           </div>
           <div className="border border-primary rounded-[50px] cursor-pointer my-4">
             <label htmlFor="logo" className="flex justify-between items-center px-8">
               <div className="flex items-center py-5 gap-2">
                 <Upload />
                 <p className="text-textPrimary block">
-                  {selectedImage ? selectedImage.name : 'Upload logo. (JPG, PNG)'}
+                  {selectedAvatar ? selectedAvatar.name : 'Upload logo. (JPG, PNG)'}
                 </p>
               </div>
               <div>
@@ -77,10 +83,11 @@ export default function EditUser({ id, setIsOpenEdit }) {
                   hidden
                   type="file"
                   id="logo"
-                  onChange={(e) => {
-                    register('image', { value: e.target.files[0] });
-                    setSelectedImage(e.target.files[0]); // Update selectedImage state
-                  }}
+                  {...register('avatar', {
+                    onChange: (e) => {
+                      setSelectedAvatar(e.target.files[0]);
+                    },
+                  })}
                 />
               </div>
             </label>

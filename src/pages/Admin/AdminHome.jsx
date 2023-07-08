@@ -6,7 +6,6 @@ import AdminNavbar from './AdminNavbar';
 import Loading from '../../Shared/Loading/Loading';
 import { useAuth } from '../../Contexts/AuthProvider';
 import { useGlobalCtx } from '../../Contexts/GlobalProvider';
-import { Avatar } from '../../Assets/SVGcomponents';
 import ImageShow from '../../Shared/ImageShow/ImageShow';
 
 /**
@@ -35,7 +34,9 @@ function AdminHome() {
             <div className="overflow-y-scroll hide-scrollbar h-[85vh] flex flex-col px-96">
               {allSoftwares.map((software) => (
                 <div key={software.id} className="py-5 bg-white w-[145px] h-auto px-2 mb-8 border border-borderColor rounded-3xl flex flex-col justify-center items-center cursor-pointer">
-                  <ImageShow path={software.image} />
+                  <div className="w-16 h-16">
+                    <ImageShow path={software.image} />
+                  </div>
                   <p className="text-heading pt-2">{software.name}</p>
                 </div>
               ))}
@@ -54,8 +55,8 @@ function AdminHome() {
                 className="flex flex-col md:flex-row justify-between items-center bg-white px-5 py-3 hover:bg-background [&>*:nth-child(3)]:hover:bg-primary [&>*:nth-child(3)]:hover:text-white"
               >
                 <div className="flex justify-start items-center w-full md:w-4/12">
-                  <div>
-                    {user?.image ? <img src={user?.image} alt="" className="w-20 h-20 mr-2" /> : <Avatar className="w-20 h-20 mr-2" />}
+                  <div className="w-20 h-20 mr-4 rounded-[50px] overflow-hidden">
+                    <ImageShow path={user?.avatar} />
                   </div>
                   <div>
                     <p>{user.userName}</p>
@@ -68,7 +69,9 @@ function AdminHome() {
                       key={app.id}
                       className="py-2 bg-white w-20 h-20 border border-borderColor rounded-3xl flex flex-col justify-start items-center"
                     >
-                      <img src={app.image} alt="" />
+                      <div className="w-16 h-16">
+                        <ImageShow path={app.image} />
+                      </div>
                     </div>
                   ))}
                 </div>
