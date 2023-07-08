@@ -2,68 +2,49 @@
 import { Upload } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import '../Admin/AdminHome.css';
+import { useGlobalCtx } from '../../Contexts/GlobalProvider';
 import Input from '../../Shared/Input/Input';
-// import { useGlobalCtx } from '../../Contexts/GlobalProvider';
+import '../Admin/AdminHome.css';
 
+/**
+ * Renders the Add New Software component.
+ * @param {Object} props - Component props.
+ * @param {function} props.setIsAddNewSoftwareOpen
+ * - Function to set the state of the Add New Software modal.
+ * @returns {JSX.Element} Add New Software component.
+ */
 export default function AddNewSoftware({ setIsAddNewSoftwareOpen }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const { handleSubmit, register, reset } = useForm();
-  // const { createSoftware } = useGlobalCtx();
-  function convertImageToBase64(image) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+  const { createSoftware } = useGlobalCtx();
 
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-
-      reader.onerror = (error) => {
-        reject(error);
-      };
-
-      reader.readAsDataURL(image);
-    });
-  }
-
-  const onsubmit = async (data) => {
-    const { name, path } = data;
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('path', path);
-
-    if (selectedImage) {
-      try {
-        const base64Image = await convertImageToBase64(selectedImage);
-        formData.append('image', base64Image);
-
-        console.log('formData:', formData);
-
-        setIsAddNewSoftwareOpen(false);
-        // createSoftware(formData);
-        reset();
-      } catch (error) {
-        console.log('Image conversion failed:', error);
-      }
-    } else {
-      console.log('No image selected');
-
-      setIsAddNewSoftwareOpen(false);
-      // createSoftware(formData);
-      reset();
-    }
+  const onSubmit = async (data) => {
+    const fd = new FormData();
+    const image = data.image[0];
+    const payload = {
+      image,
+      data: JSON.stringify({
+        name: data.name,
+        path: data.path,
+      }),
+    };
+    Object.keys(payload).forEach((key) => fd.append(key, payload[key]));
+    createSoftware(fd);
+    setIsAddNewSoftwareOpen(false);
+    setSelectedImage(false);
+    reset();
   };
 
   return (
-    <div className="w-[564px] h-[30rem] bg-white cursor-pointer rounded-[8px] p-8 text-[#000000]">
-      <h2 className="font-medium">Add New software</h2>
+    <div className="w-[564px] h-3/6 bg-white cursor-pointer rounded-[18px] p-8 text-[#000000]">
+      <h2 className="font-medium">Add New Software</h2>
       <hr className="opacity-10 mt-2" />
-      <form onSubmit={handleSubmit(onsubmit)} className="mt-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
         <div className="">
-          <Input label="Software Name" register={{ ...register('name') }} />
+          <Input label="Software Name" register={register('name')} />
         </div>
         <div className="">
-          <Input label="Software Path" register={{ ...register('path') }} />
+          <Input label="Software Path" register={register('path')} />
         </div>
         <div className="border border-primary rounded-[50px] cursor-pointer my-4">
           <label htmlFor="logo" className="flex justify-between items-center px-8">

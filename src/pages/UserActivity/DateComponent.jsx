@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Calendar } from '@phosphor-icons/react';
 import CalendarComponent from './CalendarComponent';
-import Modal from '../../Hooks/Modal';
+import Modal from '../../Shared/ModalWrapper/Modal';
 
 function DateComponent() {
   const [date, setDate] = useState(new Date());

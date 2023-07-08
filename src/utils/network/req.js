@@ -68,7 +68,7 @@ export default function req({
         url,
         method: endpoint.method,
         headers: { ...endpoint.headers, ...headers },
-        data: { ...endpoint.body, ...body },
+        data: body,
         params: { ...query },
         withCredentials: true,
     };

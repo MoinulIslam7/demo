@@ -7,11 +7,16 @@ import Loading from '../../Shared/Loading/Loading';
 import { useAuth } from '../../Contexts/AuthProvider';
 import { useGlobalCtx } from '../../Contexts/GlobalProvider';
 import { Avatar } from '../../Assets/SVGcomponents';
+import ImageShow from '../../Shared/ImageShow/ImageShow';
 
+/**
+ * Renders the Admin Home component.
+ * Show all users and all apps.
+ * @returns {JSX.Element} Admin Home component.
+ */
 function AdminHome() {
   const { allusers, isLoading } = useAuth();
   const { allSoftwares, loading } = useGlobalCtx();
-  console.log(allSoftwares);
 
   if (isLoading || loading) return <Loading />;
 
@@ -30,7 +35,7 @@ function AdminHome() {
             <div className="overflow-y-scroll hide-scrollbar h-[85vh] flex flex-col px-96">
               {allSoftwares.map((software) => (
                 <div key={software.id} className="py-5 bg-white w-[145px] h-auto px-2 mb-8 border border-borderColor rounded-3xl flex flex-col justify-center items-center cursor-pointer">
-                  <img src={software?.path} alt="" />
+                  <ImageShow path={software.image} />
                   <p className="text-heading pt-2">{software.name}</p>
                 </div>
               ))}
@@ -46,9 +51,9 @@ function AdminHome() {
             {allusers.map((user) => (
               <div
                 key={user.id}
-                className="flex justify-between items-center bg-white px-5 py-3 hover:bg-background [&>*:nth-child(3)]:hover:bg-primary [&>*:nth-child(3)]:hover:text-white"
+                className="flex flex-col md:flex-row justify-between items-center bg-white px-5 py-3 hover:bg-background [&>*:nth-child(3)]:hover:bg-primary [&>*:nth-child(3)]:hover:text-white"
               >
-                <div className="flex justify-start items-center w-4/12">
+                <div className="flex justify-start items-center w-full md:w-4/12">
                   <div>
                     {user?.image ? <img src={user?.image} alt="" className="w-20 h-20 mr-2" /> : <Avatar className="w-20 h-20 mr-2" />}
                   </div>
@@ -57,7 +62,7 @@ function AdminHome() {
                     <p>{user.email}</p>
                   </div>
                 </div>
-                <div className="flex justify-start items-center w-6/12 gap-4">
+                <div className="flex justify-start items-center w-full md:w-6/12 gap-4">
                   {user.app.slice(0, 5).map((app) => (
                     <div
                       key={app.id}

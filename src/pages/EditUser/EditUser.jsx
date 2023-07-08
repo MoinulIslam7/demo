@@ -8,6 +8,12 @@ import { useAuth } from '../../Contexts/AuthProvider';
 import { Avatar } from '../../Assets/SVGcomponents';
 import '../Admin/AdminHome.css';
 
+/**
+ * Renders the Edit User component.
+ * @param {string} id - User ID.
+ * @param {function} setIsOpenEdit - Function to toggle edit mode.
+ * @returns {JSX.Element} Edit User component.
+ */
 export default function EditUser({ id, setIsOpenEdit }) {
   const { allusers } = useAuth();
   const user = allusers.find((u) => u.id === id);
@@ -20,18 +26,33 @@ export default function EditUser({ id, setIsOpenEdit }) {
 
   const onsubmit = (data) => {
     Object.keys(data).forEach((key) => {
-      if (data[key] === '' || data[key] === {} || data[key] === undefined || data[key] === [] || data[key] === {} || data[key] === null) {
+      if (
+        data[key] === ''
+        || data[key] === {}
+        || data[key] === undefined
+        || data[key] === []
+        || data[key] === {}
+        || data[key] === null
+      ) {
         delete data[key];
       }
     });
-    const appIds = selectApps?.map((a) => a.id);
-    const formData = { ...data, role: selectedOption, app: appIds };
+    const appIds = selectApps.map((a) => a.id);
+    const avatar = data.image[0];
+    const formData = new FormData();
+    const payload = {
+      avatar,
+      ...data,
+      role: selectedOption,
+      app: appIds,
+    };
+    Object.keys(payload).forEach((key) => formData.append(key, payload[key]));
     setIsOpenEdit(false);
     updateOne(id, formData);
   };
 
   return (
-    <div className="w-[564px] h-[55rem] bg-white cursor-pointer rounded-[8px] p-8 text-[#000000]">
+    <div className="w-[564px] h-5/6 bg-white cursor-pointer rounded-[8px] p-8 text-[#000000]">
       <h2 className="font-medium">
         Update
         <span className="mx-1.5 font-extrabold">{user.name}</span>
@@ -85,11 +106,7 @@ export default function EditUser({ id, setIsOpenEdit }) {
           />
         </div>
         <div>
-          <RoleInput
-            label="Role"
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-          />
+          <RoleInput label="Role" selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
         </div>
         <div className="flex justify-end items-center">
           <input type="submit" className="bg-primary cursor-pointer text-white rounded-[50px] py-4 px-8" value="Update" />

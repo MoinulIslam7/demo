@@ -4,7 +4,7 @@ import { Copy, Minus, X } from '@phosphor-icons/react';
 import { useAuth } from '../../Contexts/AuthProvider';
 import { Avatar, Logo } from '../../Assets/SVGcomponents';
 import UserNav from '../../Shared/userNav/UserNav';
-import Modal from '../../Hooks/Modal';
+import Modal from '../../Shared/ModalWrapper/Modal';
 
 export default function UserNavbar() {
   const userNavRef = useRef();

@@ -1,9 +1,6 @@
 import React from 'react';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import UserNavbar from './UserNavbar';
-import {
-  Figma, PhotoShop, Team, Vscode,
-} from '../../Assets/SVGcomponents';
 import { useAuth } from '../../Contexts/AuthProvider';
 
 export default function UserHome() {
@@ -19,19 +16,19 @@ export default function UserHome() {
           <p className="text-heading text-extrabold text-xl pb-9">Recently Used</p>
           <div className="flex justify-start gap-8 items-center">
             <div className="px-5 py-5 bg-white w-[120px] h-[120px] rounded-[24px] flex flex-col justify-center items-center">
-              <Figma />
+              <img src="" alt="" />
               <p className="mt-2 text-base">Figma</p>
             </div>
             <div className="px-5 py-5 bg-white w-[120px] h-[120px] rounded-[24px] flex flex-col justify-center items-center">
-              <Vscode />
+              <img src="" alt="" />
               <p className="mt-2 text-base">Vs Code</p>
             </div>
             <div className="px-5 py-5 bg-white w-[120px] h-[120px] rounded-[24px] flex flex-col justify-center items-center">
-              <PhotoShop />
+              <img src="" alt="" />
               <p className="mt-2 text-base">Photoshop</p>
             </div>
             <div className="px-5 py-5 bg-white w-[120px] h-[120px] rounded-[24px] flex flex-col justify-center items-center">
-              <Team />
+              <img src="" alt="" />
               <p className="mt-2 text-base">Team</p>
             </div>
           </div>

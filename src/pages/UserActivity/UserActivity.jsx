@@ -15,7 +15,12 @@ import DateComponent from './DateComponent';
 import SoftwarePermission from './SoftwarePermission';
 import AdminNavbar from '../Admin/AdminNavbar';
 import { useAuth } from '../../Contexts/AuthProvider';
-import Modal from '../../Hooks/Modal';
+import Modal from '../../Shared/ModalWrapper/Modal';
+
+/**
+ * Renders the User Activity component.
+ * @returns {JSX.Element} User Activity component.
+ */
 
 function UserActivity() {
   const [selectedUser, setSelectedUser] = useState({});

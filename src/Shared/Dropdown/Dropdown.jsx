@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { CaretDown } from '@phosphor-icons/react';
-import { Link } from 'react-router-dom'; // Import the Link component from React Router
+import { Link } from 'react-router-dom';
 import useOnclickOutside from '../../Hooks/UseOnClickOutSide';
 import { useAuth } from '../../Contexts/AuthProvider';
 import EditUser from '../../pages/EditUser/EditUser';
-import ModalWrapper from '../../Hooks/ModalWrapper';
+import ModalWrapper from '../ModalWrapper/ModalWrapper';
 
 function Dropdown({ id }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
