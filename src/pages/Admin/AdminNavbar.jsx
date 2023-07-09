@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
- Copy, Minus, Plus, X,
+  Copy,
+  Minus,
+  Plus,
+  X,
 } from '@phosphor-icons/react';
 import AddNewSoftware from '../AddNewSoftware/AddNewSoftware';
 import AddNewUser from '../AddNewUser/AddNewUser';
@@ -9,22 +12,24 @@ import ModalWrapper from '../../Shared/ModalWrapper/ModalWrapper';
 import { Avatar, Logo } from '../../Assets/SVGcomponents';
 import { useAuth } from '../../Contexts/AuthProvider';
 import UserNav from '../../Shared/userNav/UserNav';
+import Modal from '../../Shared/ModalWrapper/Modal';
 
 /**
  * Renders the Admin Navbar component.
  * @returns {JSX.Element} Admin Navbar component.
  */
+
 export default function AdminNavbar() {
+  const userNavRef = useRef();
   const { user } = useAuth();
   const [isAddNewUserOpen, setIsAddNewUserOpen] = useState(false);
   const [isAddNewSoftwareOpen, setIsAddNewSoftwareOpen] = useState(false);
-  const [isUserNavOpen, setIsUserNavOpen] = useState(false);
 
-  // Separate state variables for AddNewUser component
-  const [addNewUserState, setAddNewUserState] = useState({});
-
-  // Separate state variables for AddNewSoftware component
-  const [addNewSoftwareState, setAddNewSoftwareState] = useState({});
+  const handleModal = (ref) => {
+    if (ref) {
+      ref.current?.classList?.remove('hidden');
+    }
+  };
 
   const toggleAddNewUser = () => {
     setIsAddNewUserOpen(!isAddNewUserOpen);
@@ -32,10 +37,6 @@ export default function AdminNavbar() {
 
   const toggleAddNewSoftware = () => {
     setIsAddNewSoftwareOpen(!isAddNewSoftwareOpen);
-  };
-
-  const toggleUserNav = () => {
-    setIsUserNavOpen(!isUserNavOpen);
   };
 
   return (
@@ -56,11 +57,9 @@ export default function AdminNavbar() {
 
         <div>
           <ModalWrapper isOpen={isAddNewSoftwareOpen} toggleModal={toggleAddNewSoftware}>
-            <AddNewSoftware
-              setIsAddNewSoftwareOpen={setIsAddNewSoftwareOpen}
-              state={addNewSoftwareState} // Pass the state variable to the component
-              setState={setAddNewSoftwareState} // Pass the setState function to update the state
-            />
+            <div className="content">
+              <AddNewSoftware setIsAddNewSoftwareOpen={setIsAddNewSoftwareOpen} />
+            </div>
           </ModalWrapper>
           <button className="mr-4 p-2 flex justify-center items-center gap-1" onClick={toggleAddNewSoftware}>
             <Plus />
@@ -69,11 +68,9 @@ export default function AdminNavbar() {
         </div>
         <div>
           <ModalWrapper isOpen={isAddNewUserOpen} toggleModal={toggleAddNewUser}>
-            <AddNewUser
-              setIsModalOpen={setIsAddNewUserOpen}
-              state={addNewUserState} // Pass the state variable to the component
-              setState={setAddNewUserState} // Pass the setState function to update the state
-            />
+            <div className="content">
+              <AddNewUser setIsAddNewUserOpen={setIsAddNewUserOpen} />
+            </div>
           </ModalWrapper>
 
           <button className="mr-4 p-2 flex justify-center items-center gap-1" onClick={toggleAddNewUser}>
@@ -84,10 +81,12 @@ export default function AdminNavbar() {
       </div>
       <div className="flex flex-row justify-center items-center gap-4">
         <div className="p-4">
-          <button className="flex justify-start gap-1 items-center" onClick={toggleUserNav}>
+          <button className="flex justify-start gap-1 items-center" onClick={() => handleModal(userNavRef)}>
             {user?.image ? <img className="w-full h-full rounded-full" src={user.image} alt="" /> : <Avatar />}
           </button>
-          {isUserNavOpen && <UserNav />}
+          <Modal modalRef={userNavRef}>
+            <UserNav />
+          </Modal>
         </div>
         <div className="hover:bg-[#ffffff33] p-4">
           <Minus color="#ffffffa6" />

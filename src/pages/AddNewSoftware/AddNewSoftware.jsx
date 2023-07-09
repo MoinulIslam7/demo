@@ -4,10 +4,12 @@ import { useForm } from 'react-hook-form';
 import { Upload } from '@phosphor-icons/react';
 import Input from '../../Shared/Input/Input';
 import '../Admin/AdminHome.css';
+import { useGlobalCtx } from '../../Contexts/GlobalProvider';
 
-export default function AddNewSoftware({ closeAddNewSoftware }) {
+export default function AddNewSoftware({ setIsAddNewSoftwareOpen }) {
   const { handleSubmit, register, reset } = useForm();
   const [selectedImage, setSelectedImage] = useState(null);
+  const { createSoftware } = useGlobalCtx();
 
   const onSubmit = async (data) => {
     const fd = new FormData();
@@ -20,7 +22,8 @@ export default function AddNewSoftware({ closeAddNewSoftware }) {
       }),
     };
     Object.keys(payload).forEach((key) => fd.append(key, payload[key]));
-    closeAddNewSoftware();
+    createSoftware(fd);
+    setIsAddNewSoftwareOpen(false);
     setSelectedImage(null);
     reset();
   };

@@ -23,7 +23,7 @@ export default function EditUser({ id, setIsOpenEdit }) {
   const [selectApps, setSelectedApps] = useState(user?.app);
   const { updateOne } = useAuth();
 
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, reset } = useForm();
 
   const onsubmit = (data) => {
     Object.keys(data).forEach((key) => {
@@ -39,7 +39,7 @@ export default function EditUser({ id, setIsOpenEdit }) {
       }
     });
     const appIds = selectApps.map((a) => a.id);
-    const avatar = data?.image[0];
+    const avatar = data?.avatar[0];
     const formData = new FormData();
     const payload = {
       avatar,
@@ -53,8 +53,10 @@ export default function EditUser({ id, setIsOpenEdit }) {
       }),
     };
     Object.keys(payload).forEach((key) => formData.append(key, payload[key]));
-    setIsOpenEdit(false);
     updateOne(id, formData);
+    setIsOpenEdit(false);
+    setSelectedAvatar(null);
+    reset();
   };
 
   return (
@@ -70,10 +72,10 @@ export default function EditUser({ id, setIsOpenEdit }) {
             <ImageShow path={user.avatar} />
           </div>
           <div className="border border-primary rounded-[50px] cursor-pointer my-4">
-            <label htmlFor="logo" className="flex justify-between items-center px-8">
+            <label htmlFor="avatar-edit" className="flex justify-between items-center px-8">
               <div className="flex items-center py-5 gap-2">
                 <Upload />
-                <p className="text-textPrimary block">
+                <p className="text-textPrimary block w-[12rem]">
                   {selectedAvatar ? selectedAvatar.name : 'Upload logo. (JPG, PNG)'}
                 </p>
               </div>
@@ -82,7 +84,7 @@ export default function EditUser({ id, setIsOpenEdit }) {
                 <input
                   hidden
                   type="file"
-                  id="logo"
+                  id="avatar-edit"
                   {...register('avatar', {
                     onChange: (e) => {
                       setSelectedAvatar(e.target.files[0]);

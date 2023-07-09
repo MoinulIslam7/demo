@@ -9,7 +9,7 @@ import SoftwarePermissionInput from '../../Shared/SoftwarePermissionInput/Softwa
 import { useAuth } from '../../Contexts/AuthProvider';
 import '../Admin/AdminHome.css';
 
-export default function AddNewUser({ closeAddNewUser }) {
+export default function AddNewUser({ setIsAddNewUserOpen }) {
   const [selectedOption, setSelectedOption] = useState('');
   const [selectApps, setSelectedApps] = useState([]);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
@@ -18,7 +18,6 @@ export default function AddNewUser({ closeAddNewUser }) {
   const { handleSubmit, register, reset } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
     const appIds = selectApps.map((a) => a.id);
     const avatar = data.avatar[0];
     const formData = new FormData();
@@ -34,7 +33,8 @@ export default function AddNewUser({ closeAddNewUser }) {
       }),
     };
     Object.keys(payload).forEach((key) => formData.append(key, payload[key]));
-    closeAddNewUser();
+    setIsAddNewUserOpen(false);
+    setSelectedAvatar(null);
     registerUser(formData);
     reset();
   };
@@ -45,7 +45,7 @@ export default function AddNewUser({ closeAddNewUser }) {
       <hr className="opacity-10 mt-2" />
       <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
         <div className="border border-primary rounded-[50px] cursor-pointer my-4">
-          <label htmlFor="logo" className="flex justify-between items-center px-8">
+          <label htmlFor="avatar-upload" className="flex justify-between items-center px-8">
             <div className="flex items-center py-5 gap-2">
               <Upload />
               <p className="text-textPrimary block">
@@ -57,10 +57,9 @@ export default function AddNewUser({ closeAddNewUser }) {
               <input
                 hidden
                 type="file"
-                id="logo"
+                id="avatar-upload"
                 {...register('avatar', {
                   onChange: (e) => {
-                    console.log(e.target.files[0]);
                     setSelectedAvatar(e.target.files[0]);
                   },
                 })}

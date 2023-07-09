@@ -53,7 +53,7 @@ export default function SoftwarePermission({ selectedUser, setSelectedUser }) {
   return (
     <div
       style={{ boxShadow: '0px 4px 40px rgba(0, 0, 0, 0.09)' }}
-      className="absolute m-auto right-0 left-0 top-48 bottom-0 w-[828px] h-[50vh] bg-white cursor-pointer rounded-[8px] p-8"
+      className="absolute m-auto right-0 left-0 top-60 bottom-0 w-[828px] h-[50vh] bg-white cursor-pointer rounded-[8px] p-8"
     >
       <div className="flex gap-8">
         <div className="w-6/12">
@@ -117,7 +117,9 @@ export default function SoftwarePermission({ selectedUser, setSelectedUser }) {
             {unselectedApps.map((software) => (
               <div key={software.id} className="flex justify-between items-start">
                 <div className="flex justify-start items-center">
-                  <img className="w-10 h-10 mr-3" src={software?.image} alt="" />
+                  <div className="w-10 h-10 mr-3">
+                    <ImageShow path={software?.image} />
+                  </div>
                   <div>
                     <p className="font-semibold">{software.name}</p>
                     <p className="text-body">{software.path}</p>
