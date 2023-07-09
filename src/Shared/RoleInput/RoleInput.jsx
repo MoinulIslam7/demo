@@ -1,5 +1,18 @@
 import React, { useState } from 'react';
 import '../Input/Input.css';
+/**
+ * Renders a role input component.
+ *
+ * This component provides an input field with a dropdown menu of role options.
+ * The user can select a role from the dropdown, and the selected role is managed
+ * and updated through the `selectedOption` and `setSelectedOption` props.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.label - The label for the input field.
+ * @param {string} props.selectedOption - The currently selected role.
+ * @param {function} props.setSelectedOption - The function to update the selected role.
+ * @returns {JSX.Element} The rendered role input component.
+ */
 
 function RoleInput({ label, selectedOption, setSelectedOption }) {
   const [isOpen, setIsOpen] = useState(false);

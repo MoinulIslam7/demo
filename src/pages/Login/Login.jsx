@@ -12,6 +12,18 @@ import { Logo } from '../../Assets/SVGcomponents';
 import Input from '../../Shared/Input/Input';
 import { useAuth } from '../../Contexts/AuthProvider';
 
+/**
+ * Renders a login form for users to authenticate.
+ *
+ * This component displays a login form where users can enter their username and password to log in.
+ * It utilizes the `Input` component for input fields with icons. Upon submission, the form data is
+ * passed to the `logIn` function from the `AuthContext` to authenticate the user.
+ * navigation links to the registration page for users who don't have an account
+ *  and a forgot password link.
+ *
+ * @returns {JSX.Element} The rendered login form.
+ */
+
 function Login() {
   const { logIn } = useAuth();
   const { handleSubmit, register } = useForm();

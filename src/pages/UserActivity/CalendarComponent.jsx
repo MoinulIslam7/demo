@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
 
+/**
+ * Renders a calendar component with navigation buttons and selectable dates.
+ *
+ * This component displays a calendar
+ * component with previous month and next month navigation buttons.
+ * It allows selecting dates by clicking on specific days in the calendar. The selected date is
+ * managed and passed to the `onSelect` callback prop for further processing.
+ *
+ * @param {Object} props - The component props.
+ * @param {function} props.onSelect - The function to be called when a date is selected.
+ * @returns {JSX.Element} The rendered calendar component.
+ */
+
 function CalendarComponent({ onSelect }) {
   const [selectedDate, setSelectedDate] = useState();
   const [currentMonth, setCurrentMonth] = useState(new Date());

@@ -1,5 +1,17 @@
 import React, { useEffect } from 'react';
 import './ModalWrapper.css';
+/**
+ * Renders a modal wrapper component.
+ *
+ * This component wraps content within a modal that can be toggled to open or close.
+ * It provides functionality to close the modal when the Escape key is pressed.
+ *
+ * @param {Object} props - The component props.
+ * @param {function} props.toggleModal - The function to toggle the modal open or close.
+ * @param {boolean} props.isOpen - A boolean indicating whether the modal is open or not.
+ * @param {React.ReactNode} props.children - The content to be rendered within the modal.
+ * @returns {JSX.Element} The rendered modal wrapper component.
+ */
 
 export default function ModalWrapper({ toggleModal, isOpen, children }) {
   useEffect(() => {

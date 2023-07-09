@@ -2,6 +2,15 @@ import React, { useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Calendar } from '@phosphor-icons/react';
 import CalendarComponent from './CalendarComponent';
 import Modal from '../../Shared/ModalWrapper/Modal';
+/**
+ * Renders a date component with navigation buttons and a calendar modal.
+ *
+ * This component displays a date component with a previous day navigation button,
+ * a calendar modal for selecting dates, and a next day navigation button. The selected
+ * date is managed and updated within the component.
+ *
+ * @returns {JSX.Element} The rendered date component.
+ */
 
 function DateComponent() {
   const [date, setDate] = useState(new Date());

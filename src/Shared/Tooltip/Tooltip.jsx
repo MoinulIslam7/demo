@@ -1,5 +1,15 @@
 import { Info } from '@phosphor-icons/react';
 import React, { useState } from 'react';
+/**
+ * Renders a tooltip component with an information icon.
+ *
+ * This component displays an information icon, and when hovered or focused,
+ * it shows a tooltip with the provided information.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.information - The information to display in the tooltip.
+ * @returns {JSX.Element} The rendered tooltip component.
+ */
 
 function Tooltip({ information }) {
   const [isTooltipVisible, setTooltipVisible] = useState(false);

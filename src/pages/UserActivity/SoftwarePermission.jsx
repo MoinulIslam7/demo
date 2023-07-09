@@ -4,6 +4,18 @@ import { useAuth } from '../../Contexts/AuthProvider';
 import Loading from '../../Shared/Loading/Loading';
 import ImageShow from '../../Shared/ImageShow/ImageShow';
 
+/**
+ * Renders a software permission component for managing software access for a selected user.
+ *
+ * This component displays a user interface for managing software permissions for a selected user.
+ * It allows selecting or deselecting software options and updating the user's permissions.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.selectedUser - The selected user object.
+ * @param {function} props.setSelectedUser - The function to update the selected user object.
+ * @returns {JSX.Element} The rendered software permission component.
+ */
+
 export default function SoftwarePermission({ selectedUser, setSelectedUser }) {
   const { allSoftwares, loading } = useGlobalCtx();
   const { updateOne, allusers, setAllUsers } = useAuth();

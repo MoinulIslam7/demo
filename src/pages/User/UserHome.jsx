@@ -2,6 +2,21 @@ import React from 'react';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import UserNavbar from './UserNavbar';
 import { useAuth } from '../../Contexts/AuthProvider';
+import ImageShow from '../../Shared/ImageShow/ImageShow';
+/**
+ * Renders the user's home page with recently used software and all software options.
+ *
+ * This component displays the user's home page,
+ * which includes sections for recently used software and
+ * all available software. It utilizes the `UserNavbar`
+ * component for the navigation bar. The recently
+ * used software section shows a grid of software
+ * items with their respective icons and names. The all
+ * software section includes a search input field and a grid of
+ * software items fetched from the user's data.
+ *
+ * @returns {JSX.Element} The rendered user home page.
+ */
 
 export default function UserHome() {
   const { user } = useAuth();
@@ -46,8 +61,10 @@ export default function UserHome() {
           <div className="grid grid-cols-8 gap-8">
             {
               user.app?.map((software) => (
-                <div className="px-5 py-5 bg-white w-[120px] h-[120px] rounded-[24px] flex flex-col justify-center items-center border border-borderColor">
-                  <img src={software.image} alt="" />
+                <div key={software.id} className="px-5 py-5 bg-white w-[120px] h-[120px] rounded-[24px] flex flex-col justify-center items-center border border-borderColor">
+                  <div>
+                    <ImageShow path={software.image} />
+                  </div>
                   <p className="mt-2 text-base">{software.name}</p>
                 </div>
               ))

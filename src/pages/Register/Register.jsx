@@ -14,6 +14,19 @@ import Input from '../../Shared/Input/Input';
 import req from '../../utils/network/req';
 import Loading from '../../Shared/Loading/Loading';
 
+/**
+ * Renders a registration form for new users.
+ *
+ * This component displays a registration form where new
+ * users can sign up by providing their username,
+ * email address, password, and confirming the password.
+ * It utilizes the `Input` component for input fields
+ * with icons. Upon submission, the form data is sent to the server for registration.
+ * navigation links to the login page for users who already have an account.
+ *
+ * @returns {JSX.Element} The rendered registration form.
+ */
+
 function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const { handleSubmit, register, reset } = useForm();

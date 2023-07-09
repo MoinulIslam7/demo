@@ -34,7 +34,7 @@ function AdminHome() {
             <div className="overflow-y-scroll hide-scrollbar h-[85vh] flex flex-col px-96">
               {allSoftwares.map((software) => (
                 <div key={software.id} className="py-5 bg-white w-[145px] h-auto px-2 mb-8 border border-borderColor rounded-3xl flex flex-col justify-center items-center cursor-pointer">
-                  <div className="w-16 h-16">
+                  <div className="w-14 h-14">
                     <ImageShow path={software.image} />
                   </div>
                   <p className="text-heading pt-2">{software.name}</p>

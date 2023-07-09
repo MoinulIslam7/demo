@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -5,6 +6,19 @@ import { Upload } from '@phosphor-icons/react';
 import Input from '../../Shared/Input/Input';
 import '../Admin/AdminHome.css';
 import { useGlobalCtx } from '../../Contexts/GlobalProvider';
+/**
+ * Renders a form for adding new software.
+ *
+ * This component provides a form with input fields for adding new software. The form includes fields for
+ * software name, software path, and uploading a logo image. The component utilizes the `useForm` hook from
+ * `react-hook-form` for form handling and validation. It also uses the `Input` component for rendering input fields.
+ * The form data is submitted using the `handleSubmit` function, and the `createSoftware` function from the
+ * `useGlobalCtx` hook is used to create the new software.
+ *
+ * @param {Object} props - The component props.
+ * @param {function} props.setIsAddNewSoftwareOpen - A function to set the state of whether the add new software form is open.
+ * @returns {JSX.Element} The rendered add new software form.
+ */
 
 export default function AddNewSoftware({ setIsAddNewSoftwareOpen }) {
   const { handleSubmit, register, reset } = useForm();

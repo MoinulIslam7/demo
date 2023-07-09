@@ -1,4 +1,16 @@
 import axios from 'axios';
+/**
+ * Send an HTTP request to the specified endpoint.
+ *
+ * @param {Object} options - The options for the request.
+ * @param {string} options.target - The target endpoint name.
+ * @param {Object} [options.body={}] - The request body data.
+ * @param {Object} [options.headers={ 'Access-Control-Allow-Origin': '*' }] - The request headers.
+ * @param {Object} [options.query={}] - The query parameters.
+ * @param {string} [options.param=''] - The URL parameter.
+ * @returns {Promise} A promise that resolves with the response data or rejects with an error.
+ * @throws {Error} If the target endpoint is invalid.
+ */
 
 const baseUrl = 'https://localhost:9998/api';
 const endpoints = {

@@ -1,6 +1,32 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-no-useless-fragment */
 import React from 'react';
 import './Input.css';
+
+/**
+ * Renders an input component with a label, icon, and other optional properties.
+ *
+ * This component displays an input field with a label and an optional icon. It supports
+ * different input variants, such as 'input' or 'textarea', and allows customization through
+ * various props like type, required, disabled, defaultValue, and more.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} [props.Variant='input'] - The input variant ('input' or 'textarea').
+ * @param {string} [props.type='text'] - The input type.
+ * @param {string} [props.label=''] - The label for the input field.
+ * @param {React.Component} [props.Icon=''] - The icon component to display.
+ * @param {boolean} [props.required=false] - A boolean indicating whether the input is required or not.
+ * @param {string} [props.name={label}] - The name attribute for the input field.
+ * @param {function} [props.onClick=()=>{}] - The function to be called on input click.
+ * @param {string} [props.step='any'] - The step attribute for number inputs.
+ * @param {string} [props.title=''] - The title attribute for the input field.
+ * @param {function} [props.onInvalid=()=>{}] - The function to handle invalid input.
+ * @param {boolean} [props.disabled=false] - A boolean indicating whether the input is disabled or not.
+ * @param {Object} [props.register={}] - The register object for form validation.
+ * @param {string} [props.className=''] - Additional CSS class name(s) for styling customization.
+ * @param {string} [props.defaultValue=''] - The default value for the input field.
+ * @returns {JSX.Element} The rendered input component.
+ */
 
 export default function Input({
   Variant = 'input',

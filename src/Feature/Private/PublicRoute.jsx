@@ -11,6 +11,5 @@ export default function PublicRoute({ children }) {
   }
 
   const userHasUserRole = checkRole('user');
-  console.log(userHasUserRole);
   return userHasUserRole ? children : <Navigate to="/login" />;
 }

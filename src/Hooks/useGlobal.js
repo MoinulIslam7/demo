@@ -5,19 +5,21 @@ import { useAuth } from '../Contexts/AuthProvider';
 const useGlobal = () => {
   const [loading, setLoading] = useState();
   const [allSoftwares, setAllSoftwares] = useState([]);
-  const { user } = useAuth();
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
-    setLoading(true);
-    req({ target: 'app' })
-      .then((res) => {
-        setAllSoftwares(res);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [user]);
+    if (isAdmin) {
+      setLoading(true);
+      req({ target: 'app' })
+        .then((res) => {
+          setAllSoftwares(res);
+        })
+        .catch((err) => console.error(err))
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [isAdmin]);
   const createSoftware = (data) => {
     req({ target: 'create', body: data })
       .then((res) => {

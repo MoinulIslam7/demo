@@ -9,10 +9,11 @@ import {
 import AddNewSoftware from '../AddNewSoftware/AddNewSoftware';
 import AddNewUser from '../AddNewUser/AddNewUser';
 import ModalWrapper from '../../Shared/ModalWrapper/ModalWrapper';
-import { Avatar, Logo } from '../../Assets/SVGcomponents';
+import { Logo } from '../../Assets/SVGcomponents';
 import { useAuth } from '../../Contexts/AuthProvider';
 import UserNav from '../../Shared/userNav/UserNav';
 import Modal from '../../Shared/ModalWrapper/Modal';
+import ImageShow from '../../Shared/ImageShow/ImageShow';
 
 /**
  * Renders the Admin Navbar component.
@@ -80,9 +81,11 @@ export default function AdminNavbar() {
         </div>
       </div>
       <div className="flex flex-row justify-center items-center gap-4">
-        <div className="p-4">
+        <div className="p-1">
           <button className="flex justify-start gap-1 items-center" onClick={() => handleModal(userNavRef)}>
-            {user?.image ? <img className="w-full h-full rounded-full" src={user.image} alt="" /> : <Avatar />}
+            <div className="w-[40px] h-[40px] rounded-full overflow-hidden bg-white">
+              <ImageShow path={user?.avatar} />
+            </div>
           </button>
           <Modal modalRef={userNavRef}>
             <UserNav />

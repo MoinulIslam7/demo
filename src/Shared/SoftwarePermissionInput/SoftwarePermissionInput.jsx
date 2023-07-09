@@ -5,6 +5,20 @@ import '../Input/Input.css';
 import { useGlobalCtx } from '../../Contexts/GlobalProvider';
 import ImageShow from '../ImageShow/ImageShow';
 
+/**
+ * Renders a software permission input component.
+ *
+ * This component provides an input field with a dropdown menu of software options.
+ * The user can select multiple software options from the dropdown, and the selected
+ * software is managed and updated through the `selectApps` and `setSelectedApps` props.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.label - The label for the input field.
+ * @param {Array} props.selectApps - The currently selected software options.
+ * @param {function} props.setSelectedApps - The function to update the selected software options.
+ * @returns {JSX.Element} The rendered software permission input component.
+ */
+
 export default function SoftwarePermissionInput({ label, selectApps, setSelectedApps }) {
   const { allSoftwares, loading } = useGlobalCtx();
   const [isOpen, setIsOpen] = useState(false);

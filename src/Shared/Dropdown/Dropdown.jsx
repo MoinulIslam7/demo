@@ -6,6 +6,17 @@ import { useAuth } from '../../Contexts/AuthProvider';
 import EditUser from '../../pages/EditUser/EditUser';
 import ModalWrapper from '../ModalWrapper/ModalWrapper';
 
+/**
+ * Renders a dropdown menu component for user actions.
+ *
+ * This component displays a button that triggers a dropdown menu when clicked. The dropdown menu
+ * includes options such as viewing user activity, editing user details, and deleting the user.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.id - The ID of the user associated with the dropdown.
+ * @returns {JSX.Element} The rendered dropdown menu component.
+ */
+
 function Dropdown({ id }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);

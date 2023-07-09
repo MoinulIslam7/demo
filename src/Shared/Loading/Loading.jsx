@@ -1,4 +1,11 @@
 import React from 'react';
+/**
+ * Renders a loading indicator component.
+ *
+ * This component displays a loading spinner or indicator while content is being loaded.
+ *
+ * @returns {JSX.Element} The rendered loading indicator component.
+ */
 
 function Loading() {
   return (

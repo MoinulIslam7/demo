@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -8,6 +9,21 @@ import RoleInput from '../../Shared/RoleInput/RoleInput';
 import SoftwarePermissionInput from '../../Shared/SoftwarePermissionInput/SoftwarePermissionInput';
 import { useAuth } from '../../Contexts/AuthProvider';
 import '../Admin/AdminHome.css';
+/**
+ * Renders a form for adding a new user.
+ *
+ * This component provides a form with input fields for adding a new user. The form includes fields for
+ * uploading an avatar, name, username, email address, password, software permission, and role.
+ * The component utilizes the `useForm` hook from `react-hook-form` for form handling and validation.
+ * It also uses the `Input` component for rendering input fields, the `SoftwarePermissionInput` component
+ * for selecting software permissions, and the `RoleInput` component for selecting the user's role.
+ * The form data is submitted using the `handleSubmit` function, and the `registerUser` function from the
+ * `useAuth` hook is used to register the new user.
+ *
+ * @param {Object} props - The component props.
+ * @param {function} props.setIsAddNewUserOpen - A function to set the state of whether the add new user form is open.
+ * @returns {JSX.Element} The rendered add new user form.
+ */
 
 export default function AddNewUser({ setIsAddNewUserOpen }) {
   const [selectedOption, setSelectedOption] = useState('');

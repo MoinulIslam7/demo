@@ -9,6 +9,7 @@ import UserActivity from '../../pages/UserActivity/UserActivity';
 import Private from '../Private/Private';
 import UserHome from '../../pages/User/UserHome';
 import PublicRoute from '../Private/PublicRoute';
+import AdminProfile from '../../pages/Admin/AdminProfile';
 
 export default function Routing() {
   return (
@@ -32,6 +33,11 @@ export default function Routing() {
         exact
         path="/userProfile"
         element={<UserProfile />}
+      />
+      <Route
+        exact
+        path="/Adminprofile"
+        element={<AdminProfile />}
       />
       <Route
         exact

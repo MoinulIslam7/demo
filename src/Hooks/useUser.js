@@ -10,6 +10,7 @@ const useUser = () => {
   const navigate = useNavigate();
 
   const checkRole = (role) => role.includes(user?.role);
+  const isAdmin = user?.role === 'admin' || user?.role === 'super admin';
 
   useEffect(() => {
     (async () => {
@@ -18,15 +19,17 @@ const useUser = () => {
         setUser(userResponse);
         setSelectedApps(userResponse.app);
 
-        const usersResponse = await req({ target: 'users' });
-        setAllUsers(usersResponse);
+        if (isAdmin) {
+          const usersResponse = await req({ target: 'users' });
+          setAllUsers(usersResponse);
+        }
       } catch (err) {
         console.error(err);
       } finally {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [isAdmin]);
 
   const logIn = (data) => {
     req({ target: 'login', body: data })
@@ -109,6 +112,7 @@ const useUser = () => {
     setSelectedApps,
     allusers,
     setAllUsers,
+    isAdmin,
   };
 };
 
