@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import React from 'react';
 /**
  * Renders an image component based on the provided path.
@@ -9,9 +10,10 @@ import React from 'react';
  * @param {string} props.path - The path of the image.
  * @returns {JSX.Element} The rendered image component.
  */
+const baseUrl = process.env.REACT_APP_API_URL;
 
 export default function ImageShow({ path }) {
   return (
-    <img src={`https://localhost:9998/api/${path}`} className="w-full h-full" alt="" />
+    <img src={`${baseUrl}/${path}`} className="w-full h-full" alt="" onError={(e) => e.target.src = 'https://www.gme.net.au/app/plugins/wp-media-folder/assets/images/default.png'} />
   );
 }

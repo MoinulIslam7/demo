@@ -7,6 +7,7 @@ import Loading from '../../Shared/Loading/Loading';
 import { useAuth } from '../../Contexts/AuthProvider';
 import { useGlobalCtx } from '../../Contexts/GlobalProvider';
 import ImageShow from '../../Shared/ImageShow/ImageShow';
+import Screenshot from '../../Feature/ScreenShot/ScreenShot';
 
 /**
  * Renders the Admin Home component.
@@ -21,6 +22,9 @@ function AdminHome() {
 
   return (
     <div className="bg-bodyBg">
+      <div>
+        <Screenshot />
+      </div>
       <div>
         <AdminNavbar />
       </div>

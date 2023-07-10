@@ -1,51 +1,81 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import React, { useEffect, useState } from 'react';
-import { ipcRenderer } from 'electron';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-function ScreenshotComponent() {
-  const [screenshotsArray, setScreenshotsArray] = useState([]);
+function ScreenShot() {
+  const [screenshots, setScreenshots] = useState([]);
 
-  useEffect(() => {
-    // Listen for IPC message from Electron.js main process
-    ipcRenderer.on('screenshot-captured', (_, filePath) => {
-      setScreenshotsArray((prevArray) => [...prevArray, filePath]);
-    });
+  const saveImage = async (blob) => {
+    try {
+      const formData = new FormData();
+      const timestamp = Date.now();
+      const imageName = `screenshot_${timestamp}.png`;
+      formData.append('image', blob, imageName);
+      const response = await axios.post('http://localhost:9998/api/images', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const imagePath = response.data.path;
 
-    // Clean up the array periodically (e.g., remove old screenshots)
-    const cleanupInterval = setInterval(() => {
-      setScreenshotsArray((prevArray) => prevArray.slice(-10)); // Keep the last 10 screenshots
-    }, 60000); // Clean up every minute
-
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(cleanupInterval);
-  }, []);
-
-  const takeScreenshot = () => {
-    ipcRenderer.send('capture-screenshot');
+      setScreenshots((prevScreenshots) => [
+        ...prevScreenshots,
+        { path: imagePath, timestamp, date: new Date(timestamp).toLocaleString() },
+      ]);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  // Trigger the initial screenshot capture
-  useEffect(() => {
-    takeScreenshot();
-  }, []);
+  const takeScreenshot = async () => {
+    const { mediaDevices } = navigator;
+    if (mediaDevices && mediaDevices.getDisplayMedia) {
+      const stream = await mediaDevices.getDisplayMedia({ video: true });
+      const track = stream.getVideoTracks()[0];
 
-  // Trigger the next screenshot capture every 2 minutes
-  useEffect(() => {
-    const screenshotInterval = setInterval(() => {
-      takeScreenshot();
-    }, 120000); // Capture every 2 minutes
+      const imageCapture = new ImageCapture(track);
+      const bitmap = await imageCapture.grabFrame();
 
-    // Clean up the interval when the component unmounts
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      context.drawImage(bitmap, 0, 0);
+
+      canvas.toBlob(async (blob) => {
+        await saveImage(blob);
+
+        track.stop();
+        stream.getVideoTracks().forEach((track1) => track1.stop());
+      }, 'image/png');
+    }
+  };
+
+  useEffect(() => {
+    const screenshotInterval = setInterval(takeScreenshot, 120000);
+
     return () => clearInterval(screenshotInterval);
   }, []);
 
   return (
     <div>
-      {screenshotsArray.map((filePath) => (
-        <img key={filePath} src={filePath} alt="Screenshot" />
+      <button onClick={takeScreenshot}>Take Screenshot</button>
+      {screenshots.map((screenshot, index) => (
+        <div key={screenshot.id}>
+          <img src={screenshot.path} alt={`Screenshot ${index}`} />
+          <p>
+            Timestamp:
+            {' '}
+            {screenshot.timestamp}
+          </p>
+          <p>
+            Date:
+            {' '}
+            {screenshot.date}
+          </p>
+        </div>
       ))}
     </div>
   );
 }
 
-export default ScreenshotComponent;
+export default ScreenShot;
